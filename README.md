@@ -1,23 +1,41 @@
-# GoLoyaltyPlatform
+# GoLoyaltyPlatform monorepo
 
-A small Go microservice demonstrating clients, awards, and rewards.
+This repository is split into:
 
-Run locally:
+- `backend/` — Go API, Swagger docs, and backend build files
+- `frontend/` — Angular 20 client
 
-- go run ./cmd/server
-- or using Makefile: make run
+## Run locally
 
-Endpoints (JSON):
-- POST /clients {name,email}
-- GET /clients/{id}
-- POST /clients/{id}/awards {type}
-- GET /clients/{id}/awards
-- GET /rewards
-- POST /clients/{id}/redeem {rewardId}
+Backend:
 
-Configuration:
-- PORT environment variable (default 8080)
+```sh
+cd backend
+make run
+```
 
-Docker:
-- docker build -t GoLoyaltyPlatform:latest .
-- docker run -p 8080:8080 GoLoyaltyPlatform:latest
+Frontend:
+
+```sh
+cd frontend
+npm install
+npm start
+```
+
+## Docker
+
+```sh
+docker compose up --build
+```
+
+## Backend endpoints
+
+- `GET /health`
+- `GET /swagger/*`
+- `GET /clients`
+- `POST /clients`
+- `GET /clients/{id}`
+- `POST /clients/{id}/awards`
+- `GET /clients/{id}/awards`
+- `GET /rewards`
+- `POST /clients/{id}/redeem`

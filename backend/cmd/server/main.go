@@ -15,6 +15,7 @@ import (
 
 	_ "awesomeProject/docs"
 	"awesomeProject/internal/client"
+	"awesomeProject/internal/httpx"
 	"awesomeProject/internal/logging"
 	"awesomeProject/internal/reward"
 	"awesomeProject/internal/store"
@@ -42,6 +43,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
+	r.Use(httpx.CORS())
 	r.Use(logging.Middleware(logger))
 	r.Use(middleware.Recoverer)
 	r.Get("/swagger/*", httpSwagger.Handler(

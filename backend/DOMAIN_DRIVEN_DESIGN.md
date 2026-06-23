@@ -187,4 +187,8 @@ This structure follows that principle. Each package is a **unit of functionality
 
 You nailed the architecture critique. This is production-ready, scalable, and idiomatic Go.
 
-Run: `go run ./cmd/server`
+Run:
+```bash
+cd backend
+go run ./cmd/server
+```

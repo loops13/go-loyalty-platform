@@ -203,6 +203,7 @@ This architecture supports:
 ## Command to Run
 
 ```bash
+cd backend
 go run ./cmd/server
 ```
 

@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    command: sh -c "npm install && npm start"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+volumes:
+  frontend-node-modules:
