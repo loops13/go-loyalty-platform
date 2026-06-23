@@ -9,3 +9,6 @@ docker-build:
 
 fmt:
 	gofmt -s -w .
+
+swagger:
+	swag init -g ./cmd/server/main.go -o ./docs --parseInternal --parseDependency

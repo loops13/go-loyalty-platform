@@ -9,6 +9,7 @@ import (
 
 	"awesomeProject/internal/client"
 	"awesomeProject/internal/logging"
+	"awesomeProject/internal/transport"
 )
 
 // Handler wraps a service and provides HTTP handlers.
@@ -26,7 +27,14 @@ func (h *Handler) RegisterRoutes(r chi.Router) {
 	r.Post("/clients/{id}/redeem", h.Redeem)
 }
 
-// List handles GET /rewards
+// List handles GET /rewards.
+// @Summary List rewards
+// @Description Returns the available rewards that can be redeemed.
+// @Tags rewards
+// @Produce json
+// @Success 200 {array} RewardResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /rewards [get]
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	rewards, err := h.svc.List(r.Context())
 	if err != nil {
@@ -41,7 +49,19 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, resp)
 }
 
-// Redeem handles POST /clients/{id}/redeem
+// Redeem handles POST /clients/{id}/redeem.
+// @Summary Redeem a reward
+// @Description Redeems a reward for a client using the supplied reward id.
+// @Tags rewards
+// @Accept json
+// @Produce json
+// @Param id path string true "Client ID"
+// @Param redeem body RedeemReq true "Redeem payload"
+// @Success 200 {object} RedeemResp
+// @Failure 400 {object} transport.ErrorResp
+// @Failure 404 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients/{id}/redeem [post]
 func (h *Handler) Redeem(w http.ResponseWriter, r *http.Request) {
 	logger := logging.FromContext(r.Context())
 	id := chi.URLParam(r, "id")
@@ -73,7 +93,7 @@ func writeJSON(w http.ResponseWriter, status int, data interface{}) {
 }
 
 func writeError(w http.ResponseWriter, status int, code, message string) {
-	writeJSON(w, status, map[string]string{"code": code, "message": message})
+	writeJSON(w, status, transport.ErrorResp{Code: code, Message: message})
 }
 
 func writeRedeemError(w http.ResponseWriter, err error) {

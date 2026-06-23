@@ -11,7 +11,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger"
 
+	_ "awesomeProject/docs"
 	"awesomeProject/internal/client"
 	"awesomeProject/internal/logging"
 	"awesomeProject/internal/reward"
@@ -42,16 +44,14 @@ func main() {
 	r.Use(middleware.RealIP)
 	r.Use(logging.Middleware(logger))
 	r.Use(middleware.Recoverer)
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
+	r.Get("/health", Health)
 
 	// Register domain handlers
 	clientHandler.RegisterRoutes(r)
 	rewardHandler.RegisterRoutes(r)
-
-	// Health check
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
-	})
 
 	// HTTP server configuration
 	srv := &http.Server{

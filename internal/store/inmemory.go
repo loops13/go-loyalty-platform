@@ -57,6 +57,17 @@ func (s *InMemoryStore) GetClient(ctx context.Context, id string) (*client.Clien
 	return s.clients[id], nil
 }
 
+func (s *InMemoryStore) ListClients(ctx context.Context) ([]client.Client, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	clients := make([]client.Client, 0, len(s.clients))
+	for _, c := range s.clients {
+		clients = append(clients, *c)
+	}
+	return clients, nil
+}
+
 func (s *InMemoryStore) AddAward(ctx context.Context, clientID string, awardType client.AwardType, pts int64) (*client.Award, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

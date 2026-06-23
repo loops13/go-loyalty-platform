@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"awesomeProject/internal/logging"
+	"awesomeProject/internal/transport"
 )
 
 // Handler wraps a service and provides HTTP handlers.
@@ -23,13 +24,48 @@ func NewHandler(svc *Service) *Handler {
 
 // RegisterRoutes registers client routes with the router.
 func (h *Handler) RegisterRoutes(r chi.Router) {
+	r.Get("/clients", h.List)
 	r.Post("/clients", h.Create)
 	r.Get("/clients/{id}", h.Get)
 	r.Post("/clients/{id}/awards", h.Award)
 	r.Get("/clients/{id}/awards", h.GetAwards)
 }
 
-// Create handles POST /clients
+// List handles GET /clients.
+// @Summary List clients
+// @Description Returns all registered clients with their current point balance.
+// @Tags clients
+// @Produce json
+// @Success 200 {array} ClientResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients [get]
+func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
+	clients, err := h.svc.List(r.Context())
+	if err != nil {
+		logger := logging.FromContext(r.Context())
+		logger.Error("failed to list clients", "error", err)
+		writeError(w, http.StatusInternalServerError, "INTERNAL_ERROR", "internal server error")
+		return
+	}
+
+	resp := make([]ClientResp, len(clients))
+	for i, c := range clients {
+		resp[i] = clientToResp(&c)
+	}
+	writeJSON(w, http.StatusOK, resp)
+}
+
+// Create handles POST /clients.
+// @Summary Create a client
+// @Description Creates a client with a name and email.
+// @Tags clients
+// @Accept json
+// @Produce json
+// @Param client body CreateReq true "Client payload"
+// @Success 201 {object} ClientResp
+// @Failure 400 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	logger := logging.FromContext(r.Context())
 	var req CreateReq
@@ -59,7 +95,16 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, clientToResp(client))
 }
 
-// Get handles GET /clients/{id}
+// Get handles GET /clients/{id}.
+// @Summary Get a client
+// @Description Retrieves a client and current point balance.
+// @Tags clients
+// @Produce json
+// @Param id path string true "Client ID"
+// @Success 200 {object} ClientResp
+// @Failure 404 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients/{id} [get]
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	client, err := h.svc.Get(r.Context(), id)
@@ -70,7 +115,19 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, clientToResp(client))
 }
 
-// Award handles POST /clients/{id}/awards
+// Award handles POST /clients/{id}/awards.
+// @Summary Award client points
+// @Description Awards points to a client using one of the supported business actions.
+// @Tags clients
+// @Accept json
+// @Produce json
+// @Param id path string true "Client ID"
+// @Param award body AwardReq true "Award payload"
+// @Success 201 {object} AwardResp
+// @Failure 400 {object} transport.ErrorResp
+// @Failure 404 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients/{id}/awards [post]
 func (h *Handler) Award(w http.ResponseWriter, r *http.Request) {
 	logger := logging.FromContext(r.Context())
 	id := chi.URLParam(r, "id")
@@ -90,7 +147,16 @@ func (h *Handler) Award(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, awardToResp(award))
 }
 
-// GetAwards handles GET /clients/{id}/awards
+// GetAwards handles GET /clients/{id}/awards.
+// @Summary List client awards
+// @Description Retrieves the award transaction history for a client.
+// @Tags clients
+// @Produce json
+// @Param id path string true "Client ID"
+// @Success 200 {array} AwardResp
+// @Failure 404 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients/{id}/awards [get]
 func (h *Handler) GetAwards(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	awards, err := h.svc.GetAwards(r.Context(), id)
@@ -115,7 +181,7 @@ func writeJSON(w http.ResponseWriter, status int, data interface{}) {
 }
 
 func writeError(w http.ResponseWriter, status int, code, message string) {
-	writeJSON(w, status, map[string]string{"code": code, "message": message})
+	writeJSON(w, status, transport.ErrorResp{Code: code, Message: message})
 }
 
 func writeClientError(w http.ResponseWriter, err error) {

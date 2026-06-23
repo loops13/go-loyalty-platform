@@ -10,6 +10,7 @@ import (
 // Repository defines client persistence operations.
 type Repository interface {
 	CreateClient(ctx context.Context, name, email string) (*Client, error)
+	ListClients(ctx context.Context) ([]Client, error)
 	GetClient(ctx context.Context, id string) (*Client, error)
 	AddAward(ctx context.Context, clientID string, awardType AwardType, pts int64) (*Award, error)
 	GetAwards(ctx context.Context, clientID string) ([]Award, error)
@@ -48,6 +49,16 @@ func (s *Service) Get(ctx context.Context, id string) (*Client, error) {
 		return nil, ErrNotFound
 	}
 	return c, nil
+}
+
+// List returns all clients.
+func (s *Service) List(ctx context.Context) ([]Client, error) {
+	clients, err := s.repo.ListClients(ctx)
+	if err != nil {
+		logging.FromContext(ctx).Error("failed to list clients", "error", err)
+		return nil, err
+	}
+	return clients, nil
 }
 
 // Award awards points for an action.
