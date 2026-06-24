@@ -22,6 +22,11 @@ npm install
 npm start
 ```
 
+The frontend uses Angular environments:
+
+- `src/environments/environment.ts` for local development (`http://localhost:8080`)
+- `src/environments/environment.prod.ts` for production (`/api`, suitable for a reverse proxy or ALB path rule)
+
 ## Docker
 
 ```sh
