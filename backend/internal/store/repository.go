@@ -14,6 +14,7 @@ type Repository interface {
 	CreateClient(ctx context.Context, name, email string) (*client.Client, error)
 	ListClients(ctx context.Context) ([]client.Client, error)
 	GetClient(ctx context.Context, id string) (*client.Client, error)
+	DeleteClient(ctx context.Context, id string) error
 	AddAward(ctx context.Context, clientID string, awardType client.AwardType, pts int64) (*client.Award, error)
 	GetAwards(ctx context.Context, clientID string) ([]client.Award, error)
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { ClientResp, AwardResp } from '../../../api/generated/api.models';
@@ -22,6 +22,7 @@ import { ClientsApiService } from '../../../api/generated/clients-api.service';
       <div class="actions">
         <a [routerLink]="['/clients', clientId, 'award']">Award points</a>
         <a [routerLink]="['/clients', clientId, 'redeem']">Redeem reward</a>
+        <a href="javascript:void(0)" class="action-link danger" (click)="remove()">Delete client</a>
       </div>
 
       <h3>Transaction history</h3>
@@ -50,7 +51,11 @@ export class ClientDetailPage implements OnInit {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  constructor(private readonly api: ClientsApiService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly api: ClientsApiService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.clientId = this.route.snapshot.paramMap.get('id') ?? '';
@@ -77,6 +82,31 @@ export class ClientDetailPage implements OnInit {
       },
       error: () => {
         this.error.set('Unable to load client details.');
+        this.loading.set(false);
+      },
+    });
+  }
+
+  remove(): void {
+    if (!this.clientId) {
+      this.error.set('Missing client id.');
+      return;
+    }
+
+    if (!confirm('Delete this client? This will remove their awards too.')) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.deleteClient(this.clientId).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.router.navigate(['/clients']);
+      },
+      error: () => {
+        this.error.set('Unable to delete client.');
         this.loading.set(false);
       },
     });

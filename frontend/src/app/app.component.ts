@@ -14,9 +14,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           <h1>Rewards dashboard</h1>
         </div>
         <nav class="nav">
-          <a routerLink="/clients" routerLinkActive="active">Clients</a>
-          <a routerLink="/clients/new" routerLinkActive="active">Create client</a>
-          <a routerLink="/rewards" routerLinkActive="active">Rewards</a>
+          <a routerLink="/clients" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Clients</a>
+          <a routerLink="/clients/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Create client</a>
+          <a routerLink="/rewards" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Rewards</a>
         </nav>
       </header>
 

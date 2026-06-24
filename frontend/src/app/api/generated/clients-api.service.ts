@@ -23,6 +23,10 @@ export class ClientsApiService extends ApiBaseService {
     return this.http.get<ClientResp>(this.url(`/clients/${clientId}`));
   }
 
+  deleteClient(clientId: string): Observable<void> {
+    return this.http.delete<void>(this.url(`/clients/${clientId}`));
+  }
+
   getClientAwards(clientId: string): Observable<AwardResp[]> {
     return this.http.get<AwardResp[]>(this.url(`/clients/${clientId}/awards`));
   }

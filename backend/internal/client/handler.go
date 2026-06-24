@@ -27,6 +27,7 @@ func (h *Handler) RegisterRoutes(r chi.Router) {
 	r.Get("/clients", h.List)
 	r.Post("/clients", h.Create)
 	r.Get("/clients/{id}", h.Get)
+	r.Delete("/clients/{id}", h.Delete)
 	r.Post("/clients/{id}/awards", h.Award)
 	r.Get("/clients/{id}/awards", h.GetAwards)
 }
@@ -113,6 +114,24 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, clientToResp(client))
+}
+
+// Delete handles DELETE /clients/{id}.
+// @Summary Delete a client
+// @Description Removes a client and their associated award history.
+// @Tags clients
+// @Param id path string true "Client ID"
+// @Success 204
+// @Failure 404 {object} transport.ErrorResp
+// @Failure 500 {object} transport.ErrorResp
+// @Router /clients/{id} [delete]
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if err := h.svc.Delete(r.Context(), id); err != nil {
+		writeClientError(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // Award handles POST /clients/{id}/awards.

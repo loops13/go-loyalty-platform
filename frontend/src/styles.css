@@ -38,6 +38,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+button.danger {
+  background: #dc2626;
+}
+
 .card {
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -119,6 +123,16 @@ select {
   gap: 12px;
   flex-wrap: wrap;
   margin: 16px 0;
+}
+
+.action-link.danger {
+  color: #dc2626;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .balance {

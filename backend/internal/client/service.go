@@ -12,6 +12,7 @@ type Repository interface {
 	CreateClient(ctx context.Context, name, email string) (*Client, error)
 	ListClients(ctx context.Context) ([]Client, error)
 	GetClient(ctx context.Context, id string) (*Client, error)
+	DeleteClient(ctx context.Context, id string) error
 	AddAward(ctx context.Context, clientID string, awardType AwardType, pts int64) (*Award, error)
 	GetAwards(ctx context.Context, clientID string) ([]Award, error)
 }
@@ -49,6 +50,23 @@ func (s *Service) Get(ctx context.Context, id string) (*Client, error) {
 		return nil, ErrNotFound
 	}
 	return c, nil
+}
+
+// Delete removes a client by ID.
+func (s *Service) Delete(ctx context.Context, id string) error {
+	logger := logging.FromContext(ctx)
+
+	if err := s.repo.DeleteClient(ctx, id); err != nil {
+		if err == ErrNotFound {
+			logger.Warn("failed to delete client", "client_id", id, "error", err)
+			return err
+		}
+		logger.Error("failed to delete client", "client_id", id, "error", err)
+		return err
+	}
+
+	logger.Info("client deleted", "client_id", id)
+	return nil
 }
 
 // List returns all clients.

@@ -57,6 +57,19 @@ func (s *InMemoryStore) GetClient(ctx context.Context, id string) (*client.Clien
 	return s.clients[id], nil
 }
 
+func (s *InMemoryStore) DeleteClient(ctx context.Context, id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if _, ok := s.clients[id]; !ok {
+		return client.ErrNotFound
+	}
+
+	delete(s.clients, id)
+	delete(s.awards, id)
+	return nil
+}
+
 func (s *InMemoryStore) ListClients(ctx context.Context) ([]client.Client, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()

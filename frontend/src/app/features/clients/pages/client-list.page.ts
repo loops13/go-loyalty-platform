@@ -35,7 +35,10 @@ import { ClientResp } from '../../../api/generated/api.models';
             <td>{{ client.name }}</td>
             <td>{{ client.email }}</td>
             <td>{{ client.pointBalance }}</td>
-            <td><a [routerLink]="['/clients', client.id]">Open</a></td>
+            <td class="row-actions">
+              <a [routerLink]="['/clients', client.id]">Open</a>
+              <a href="javascript:void(0)" class="action-link danger" (click)="remove(client)">Delete client</a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -66,6 +69,17 @@ export class ClientListPage implements OnInit {
         this.error.set('Unable to load clients.');
         this.loading.set(false);
       },
+    });
+  }
+
+  remove(client: ClientResp): void {
+    if (!confirm(`Delete ${client.name}? This will remove their awards too.`)) {
+      return;
+    }
+
+    this.api.deleteClient(client.id).subscribe({
+      next: () => this.load(),
+      error: () => this.error.set('Unable to delete client.'),
     });
   }
 }

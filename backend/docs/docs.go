@@ -110,6 +110,36 @@ const docTemplate = `{
             }
         },
         "/clients/{id}": {
+            "delete": {
+                "tags": ["clients"],
+                "summary": "Delete a client",
+                "description": "Removes a client and their associated award history.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/transport.ErrorResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/transport.ErrorResp"
+                        }
+                    }
+                }
+            },
             "get": {
                 "tags": ["clients"],
                 "summary": "Get a client",
@@ -434,7 +464,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "/",
 	Schemes:     []string{},
-	Title:       "Go Loyalty Platform API",
+	Title:       "GoLoyaltyPlatform API",
 	Description: "A small rewards microservice for clients, awards, and redemptions.",
 }
 
