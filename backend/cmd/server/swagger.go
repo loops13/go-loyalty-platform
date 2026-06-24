@@ -2,7 +2,7 @@ package main
 
 import "net/http"
 
-// @title Awesome Project API
+// @title Go Loyalty Platform API
 // @version 1.0
 // @description A small rewards microservice for clients, awards, and redemptions.
 // @BasePath /

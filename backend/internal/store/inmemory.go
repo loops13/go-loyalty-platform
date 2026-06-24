@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"awesomeProject/internal/client"
-	"awesomeProject/internal/reward"
+	"GoLoyaltyPlatform/internal/client"
+	"GoLoyaltyPlatform/internal/reward"
 )
 
 // InMemoryStore implements Repository using in-memory maps.

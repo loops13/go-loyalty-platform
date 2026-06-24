@@ -1,4 +1,4 @@
-module awesomeProject
+module GoLoyaltyPlatform
 
 go 1.23
 

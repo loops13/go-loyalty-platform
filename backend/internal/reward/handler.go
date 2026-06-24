@@ -7,9 +7,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"awesomeProject/internal/client"
-	"awesomeProject/internal/logging"
-	"awesomeProject/internal/transport"
+	"GoLoyaltyPlatform/internal/client"
+	"GoLoyaltyPlatform/internal/logging"
+	"GoLoyaltyPlatform/internal/transport"
 )
 
 // Handler wraps a service and provides HTTP handlers.

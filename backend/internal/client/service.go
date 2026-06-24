@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"awesomeProject/internal/logging"
+	"GoLoyaltyPlatform/internal/logging"
 )
 
 // Repository defines client persistence operations.

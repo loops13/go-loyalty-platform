@@ -13,12 +13,12 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger"
 
-	_ "awesomeProject/docs"
-	"awesomeProject/internal/client"
-	"awesomeProject/internal/httpx"
-	"awesomeProject/internal/logging"
-	"awesomeProject/internal/reward"
-	"awesomeProject/internal/store"
+	_ "GoLoyaltyPlatform/docs"
+	"GoLoyaltyPlatform/internal/client"
+	"GoLoyaltyPlatform/internal/httpx"
+	"GoLoyaltyPlatform/internal/logging"
+	"GoLoyaltyPlatform/internal/reward"
+	"GoLoyaltyPlatform/internal/store"
 )
 
 func main() {

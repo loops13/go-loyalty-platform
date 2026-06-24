@@ -2,10 +2,10 @@ run:
 	go run ./cmd/server
 
 build:
-	go build -o bin/awesome ./cmd/server
+	go build -o bin/goloyaltyplatform ./cmd/server
 
 docker-build:
-	docker build -t awesomeproject:latest .
+	docker build -t goloyaltyplatform:latest .
 
 fmt:
 	gofmt -s -w .

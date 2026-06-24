@@ -197,7 +197,7 @@ if !domain.ValidAwardType(awardType) {
 **Before:**
 ```go
 // internal/api/handlers.go
-import "awesomeProject/internal/store"
+import "GoLoyaltyPlatform/internal/store"
 
 // handlers know about store.Award, store.Reward
 func RegisterRoutes(mux *http.ServeMux, store *store.Store) {
@@ -208,7 +208,7 @@ func RegisterRoutes(mux *http.ServeMux, store *store.Store) {
 **After:**
 ```go
 // internal/api/handlers.go
-import "awesomeProject/internal/service"
+import "GoLoyaltyPlatform/internal/service"
 
 func RegisterRoutes(r chi.Router, svc service.ClientService) {
   // handlers only know about service interface

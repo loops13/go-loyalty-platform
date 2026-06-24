@@ -434,7 +434,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "/",
 	Schemes:     []string{},
-	Title:       "Awesome Project API",
+	Title:       "Go Loyalty Platform API",
 	Description: "A small rewards microservice for clients, awards, and redemptions.",
 }
 

@@ -10,7 +10,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     <div class="shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Awesome Project</p>
+          <p class="eyebrow">Go Loyalty Platform</p>
           <h1>Rewards dashboard</h1>
         </div>
         <nav class="nav">

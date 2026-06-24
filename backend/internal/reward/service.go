@@ -3,8 +3,8 @@ package reward
 import (
 	"context"
 
-	"awesomeProject/internal/client"
-	"awesomeProject/internal/logging"
+	"GoLoyaltyPlatform/internal/client"
+	"GoLoyaltyPlatform/internal/logging"
 )
 
 // Repository defines reward persistence operations.

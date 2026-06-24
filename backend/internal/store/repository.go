@@ -3,8 +3,8 @@ package store
 import (
 	"context"
 
-	"awesomeProject/internal/client"
-	"awesomeProject/internal/reward"
+	"GoLoyaltyPlatform/internal/client"
+	"GoLoyaltyPlatform/internal/reward"
 )
 
 // Repository defines all persistence operations.
